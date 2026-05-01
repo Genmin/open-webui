@@ -287,16 +287,28 @@
 		oldSelectedModelIds = structuredClone(selectedModelIds);
 	};
 
-	const resetInput = () => {
+	const resetInputState = () => {
 		selectedToolIds = [];
 		selectedFilterIds = [];
 		pendingOAuthTools = [];
 		webSearchEnabled = false;
 		imageGenerationEnabled = false;
 		codeInterpreterEnabled = false;
+	};
+
+	const resetInput = () => {
+		resetInputState();
 
 		if (selectedModelIds.filter((id) => id).length > 0) {
 			setDefaults();
+		}
+	};
+
+	const resetInputAndWaitForDefaults = async () => {
+		resetInputState();
+
+		if (selectedModelIds.filter((id) => id).length > 0) {
+			await setDefaults();
 		}
 	};
 
@@ -1190,7 +1202,7 @@
 
 		autoScroll = true;
 
-		resetInput();
+		await resetInputAndWaitForDefaults();
 		await chatId.set('');
 		await chatTitle.set('');
 
